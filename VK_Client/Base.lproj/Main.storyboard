@@ -25,19 +25,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пароль" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DRu-ne-BOM">
-                                        <rect key="frame" x="156.5" y="295" width="101" height="36"/>
+                                        <rect key="frame" x="156.5" y="270" width="101" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lLw-J6-a39">
-                                        <rect key="frame" x="107" y="351" width="200" height="34"/>
+                                        <rect key="frame" x="107" y="326" width="200" height="34"/>
                                         <accessibility key="accessibilityConfiguration" hint="Введите пароль"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMD-C0-7zT">
-                                        <rect key="frame" x="175.5" y="533" width="63" height="46"/>
+                                        <rect key="frame" x="175.5" y="508" width="63" height="46"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                         <state key="normal" title="Вход"/>
                                         <connections>
@@ -54,6 +54,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                 </subviews>
+                                <color key="backgroundColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="VVz-pt-V0p" firstAttribute="centerX" secondItem="RGl-QO-ZHf" secondAttribute="centerX" id="4Lt-yA-xgx"/>
                                     <constraint firstItem="lLw-J6-a39" firstAttribute="top" secondItem="DRu-ne-BOM" secondAttribute="bottom" constant="20" id="5hd-ih-Ggq"/>
@@ -63,7 +64,7 @@
                                     <constraint firstItem="OA6-yk-Gar" firstAttribute="top" secondItem="VVz-pt-V0p" secondAttribute="bottom" constant="20" id="Nxy-uG-W3L"/>
                                     <constraint firstItem="VVz-pt-V0p" firstAttribute="top" secondItem="RGl-QO-ZHf" secondAttribute="top" constant="130" id="RoJ-rZ-48q"/>
                                     <constraint firstItem="OA6-yk-Gar" firstAttribute="centerX" secondItem="RGl-QO-ZHf" secondAttribute="centerX" id="StI-97-RUP"/>
-                                    <constraint firstItem="DRu-ne-BOM" firstAttribute="top" secondItem="OA6-yk-Gar" secondAttribute="bottom" constant="75" id="Uph-sn-o3l"/>
+                                    <constraint firstItem="DRu-ne-BOM" firstAttribute="top" secondItem="OA6-yk-Gar" secondAttribute="bottom" constant="50" id="Uph-sn-o3l"/>
                                     <constraint firstAttribute="trailing" secondItem="VVz-pt-V0p" secondAttribute="trailing" constant="165" id="VUa-5N-0Jh"/>
                                     <constraint firstItem="JMD-C0-7zT" firstAttribute="top" secondItem="lLw-J6-a39" secondAttribute="bottom" constant="148" id="WTw-ZX-VTY"/>
                                     <constraint firstItem="lLw-J6-a39" firstAttribute="centerX" secondItem="RGl-QO-ZHf" secondAttribute="centerX" id="X7b-d9-wyG"/>
