@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var loginField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -47,16 +47,34 @@ class ViewController: UIViewController {
     @objc func hideKeyboard() {
         scrollView.endEditing(true)
     }
-     
-    @IBAction func login(_ sender: Any) {
-        guard let login = loginField.text else { return }
-        guard let password = passwordField.text else { return }
+    
+    func showLoginError () {
+        let alert = UIAlertController(title: "Ошибка", message: "Указан неверный логин и/или пароль. Пожалуйста проверьте и введите заново.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ошибке", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func loginCheck () -> Bool {
+        guard let login = loginField.text else { return false }
+        guard let password = passwordField.text else { return false }
         
-        if login == "admin" && password == "admin" {
-            print("Авторизация успешна!")
+        if login == "admin" && password == "1234" {
+            return true
         } else {
-            print("Ошибка логина или пароля")
+            return false
         }
+    }
+  
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        guard identifier == "loginSegue" else {
+            return false
+        }
+        let checkResult = loginCheck()
+        if !checkResult {
+            showLoginError()
+        }
+        return checkResult
     }
 
 }
