@@ -11,6 +11,7 @@ import UIKit
 class GroupsViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchButton: UIBarButtonItem!
     
     var groupsToShow: [Group]?
     
@@ -20,10 +21,15 @@ class GroupsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+//        if selectedFriend == nil { selectedFriend = friends[0].key }
+        
         print("GroupsViewController viewDidLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        guard selectedFriend != nil else {
+            return
+        }
         friends[selectedFriend!]?.groups.sort { $0.name < $1.name }
         tableView.reloadData()
         print("GroupsViewController viewWillAppear")
@@ -48,7 +54,6 @@ class GroupsViewController: UIViewController {
         groups.insert(Group(name: name), at: groups.count)
         friends[selectedFriend!]?.groups.append(Group(name: name))
         tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-//        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
     }
 }
 
@@ -59,17 +64,16 @@ extension GroupsViewController: UITableViewDelegate {
 extension GroupsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let selected: String = selectedFriend, let count: Int = friends[selected]?.groups.count else
-        { return 0 }
-//        print(count)
+        {
+            searchButton.isEnabled = false
+            return 0
+        }
+        searchButton.isEnabled = true
         return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell") as? GroupCell else { fatalError() }
-//        guard selectedFriend != nil else {
-//            cell.groupNameLabel.text = ""
-//            return cell
-//        }
         cell.groupNameLabel.text = friends[selectedFriend!]!.groups[indexPath.row].name
         cell.icon.image = UIImage(named: "groupIcon")
         
