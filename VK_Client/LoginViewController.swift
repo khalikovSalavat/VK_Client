@@ -12,17 +12,34 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var loginField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        addCircle()
+    }
+    
+    fileprivate func addCircle() {
+        
+        let circleAnimation = LoadingAnimation()
+        view.addSubview(circleAnimation)
+        
+        circleAnimation.translatesAutoresizingMaskIntoConstraints = false
+        
+        [
+            circleAnimation.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            circleAnimation.widthAnchor.constraint(equalToConstant: 45),
+            circleAnimation.heightAnchor.constraint(equalToConstant: 10),
+            circleAnimation.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 50)
+            ].forEach { $0.isActive = true }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         passwordField.isSecureTextEntry = true
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShown(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -32,7 +49,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func keyboardWillShown (notification: Notification) {
-        let info = notification.userInfo as! NSDictionary
+        let info = notification.userInfo! as NSDictionary
         let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue.size
         
         let contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: kbSize.height, right: 0.0)
@@ -77,6 +94,16 @@ class LoginViewController: UIViewController {
         }
         return checkResult
     }
-
+    
+    func animate () {
+        let offset = loginField.bounds.width
+        loginField.transform = CGAffineTransform(translationX: -offset, y: 0)
+        passwordField.transform = CGAffineTransform(translationX: offset, y: 0)
+        
+        UIView.animate(withDuration: 1, delay: 1, options: .curveEaseIn, animations: {
+            self.loginField.transform = .identity
+            self.passwordField.transform = .identity
+        }, completion: nil)
+    }
 }
 

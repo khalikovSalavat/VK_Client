@@ -10,6 +10,7 @@ import UIKit
 
 class SearchGroupsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
+//    @IBOutlet weak var navigationBar: UINavigationBar!
     
     var groupsList: [Group]?
     
@@ -21,11 +22,11 @@ class SearchGroupsViewController: UIViewController {
         
         print("SearchGroupsViewController viewDidLoad")
         
-        groupsList = remainingGroups(friendID: selectedFriend!, allGroups: groups)
-        guard groupsList != nil else {
-            print("can't take groups from remainingFroups func")
+        guard selectedFriend != nil else {
+            print("can't take groups from remainingGroups func")
             return
         }
+        groupsList = remainingGroups(friendID: selectedFriend!, allGroups: groups)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +64,7 @@ extension SearchGroupsViewController: UITableViewDelegate {
 
 extension SearchGroupsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard selectedFriend != nil else { return 0 }
         let count: Int = remainingGroups(friendID: selectedFriend!, allGroups: groups).count
         return count
     }
@@ -71,7 +73,6 @@ extension SearchGroupsViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell") as? GroupCell else { fatalError() }
         cell.groupNameLabel.text = groupsList?[indexPath.row].name
         cell.icon.image = UIImage(named: "groupIcon")
-//        print("SearchGroups cell created at row \(indexPath.row)")
         return cell
     }
     
