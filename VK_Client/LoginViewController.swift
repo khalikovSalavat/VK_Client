@@ -18,6 +18,27 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         addCircle()
+        
+        
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
+        var urlConstructor = URLComponents()
+        urlConstructor.scheme = "http"
+        urlConstructor.host = "jsonplaceholder.typicode.com"
+        urlConstructor.path = "/posts"
+        urlConstructor.queryItems = [
+            URLQueryItem(name: "title", value: "foo"),
+            URLQueryItem(name: "body", value: "bar"),
+            URLQueryItem(name: "userId", value: "1"),
+        ]
+        
+        var request = URLRequest(url: urlConstructor.url!)
+        request.httpMethod = "POST"
+        let task = session.dataTask(with: request) { (data, response, error) in
+            let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
+            print(json)
+        }
+        task.resume()
     }
     
     fileprivate func addCircle() {
@@ -106,4 +127,5 @@ class LoginViewController: UIViewController {
         }, completion: nil)
     }
 }
+
 
