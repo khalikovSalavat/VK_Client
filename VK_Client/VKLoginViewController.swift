@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import RealmSwift
 
 class VKLoginViewController: UIViewController, WKNavigationDelegate {
     @IBOutlet weak var webView: WKWebView! {
@@ -35,6 +36,7 @@ class VKLoginViewController: UIViewController, WKNavigationDelegate {
         let request = URLRequest(url: urlComponents.url!)
         
         webView.load(request)
+        
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
@@ -64,13 +66,13 @@ class VKLoginViewController: UIViewController, WKNavigationDelegate {
         
         print(token)
               
-        SessionManager.shared.token = token
-        
-        SessionManager.shared.loadFriends(token: SessionManager.shared.token)
-        SessionManager.shared.loadPhotos(token: SessionManager.shared.token)
-        SessionManager.shared.loadGroups(token: SessionManager.shared.token)
-        SessionManager.shared.loadFilteredGroups(token: SessionManager.shared.token, mask: "The swift")
+        Session.shared.token = token
+        Session.shared.userID = Int(usedIdString)!
         
         decisionHandler(.cancel)
+        
+        if let tabView = storyboard?.instantiateViewController(withIdentifier: "tabBarStoryBoard") as? UITabBarController {
+            present(tabView, animated: true, completion: nil)
+        }
     }
 }
