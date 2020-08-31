@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.swift
-//  VK_Client
+//  VK_Client2
 //
-//  Created by Salavat Khalikov on 01.07.2020.
+//  Created by Salavat Khalikov on 30.08.2020.
 //  Copyright © 2020 Salavat Khalikov. All rights reserved.
 //
 

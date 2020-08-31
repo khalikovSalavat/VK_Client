@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eaP-FK-c6s">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mP3-uB-H8E">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -8,6 +8,40 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="6EI-AD-hTI">
+            <objects>
+                <viewController id="mP3-uB-H8E" customClass="VKLoginViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aHp-eK-XbQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oyv-C9-bo3">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Oyv-C9-bo3" secondAttribute="bottom" id="4EU-rh-TNN"/>
+                            <constraint firstItem="Oyv-C9-bo3" firstAttribute="top" secondItem="aHp-eK-XbQ" secondAttribute="top" id="I4b-BA-FN0"/>
+                            <constraint firstItem="Oyv-C9-bo3" firstAttribute="trailing" secondItem="aqy-GR-AAW" secondAttribute="trailing" id="fn5-sW-xYk"/>
+                            <constraint firstItem="Oyv-C9-bo3" firstAttribute="leading" secondItem="aqy-GR-AAW" secondAttribute="leading" id="hhH-Tf-aMV"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="aqy-GR-AAW"/>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="Oyv-C9-bo3" id="0p4-tP-uul"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dWd-6p-VM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="170" y="115"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -95,7 +129,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="171" y="115"/>
+            <point key="canvasLocation" x="1106" y="-682"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="7Yy-wo-JR8">
@@ -109,8 +143,8 @@
                     </tabBar>
                     <connections>
                         <segue destination="m83-gi-o5z" kind="relationship" relationship="viewControllers" id="lIC-3U-iZa"/>
-                        <segue destination="fpA-Yn-bnt" kind="relationship" relationship="viewControllers" id="ZzG-1G-1bc"/>
-                        <segue destination="oEp-yi-BHo" kind="relationship" relationship="viewControllers" id="DMp-QF-NFk"/>
+                        <segue destination="fpA-Yn-bnt" kind="relationship" relationship="viewControllers" id="MbQ-ap-P4y"/>
+                        <segue destination="oEp-yi-BHo" kind="relationship" relationship="viewControllers" id="Ned-Ia-tQY"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1QZ-db-9Rg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -243,7 +277,7 @@
         <!--Friends View Controller-->
         <scene sceneID="VJQ-eR-yRs">
             <objects>
-                <viewController id="OEu-xg-Rdu" customClass="FriendsViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="friendsVC" id="OEu-xg-Rdu" customClass="FriendsViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eiL-Gb-igG">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -252,18 +286,9 @@
                                 <rect key="frame" x="0.0" y="27" width="414" height="842"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Поиск друзей" showsCancelButton="YES" id="tSh-Tl-BVm" customClass="FriendsSearchBar" customModule="VK_Client" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
-                                    <scopeButtonTitles>
-                                        <string>Title</string>
-                                        <string>Title</string>
-                                    </scopeButtonTitles>
-                                </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FriendCell" rowHeight="70" id="Kfs-hG-xMZ" customClass="FriendCell" customModule="VK_Client" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="84" width="414" height="70"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Kfs-hG-xMZ" id="djj-Sh-BAi">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
@@ -329,8 +354,7 @@
                     <navigationItem key="navigationItem" id="OLT-5D-65c"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="searchBar" destination="tSh-Tl-BVm" id="uws-wJ-WyZ"/>
-                        <outlet property="tableView" destination="1TK-3T-XPC" id="aWK-Kq-XF4"/>
+                        <outlet property="tableView" destination="1TK-3T-XPC" id="beg-Et-ZVG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ns9-0k-doO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -437,7 +461,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5E-Ao-5a7">
-                                                    <rect key="frame" x="121" y="20" width="42" height="21"/>
+                                                    <rect key="frame" x="78" y="20" width="316" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -469,13 +493,14 @@
                     <navigationItem key="navigationItem" id="AHT-Ng-LIT">
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="dLX-Nh-Cm1">
                             <connections>
-                                <segue destination="ifH-PZ-i14" kind="show" id="ArC-6U-3Um"/>
+                                <action selector="openSearchGroupsViewController" destination="Cbg-fS-nYC" id="Wfm-Ln-wgN"/>
+                                <segue destination="ifH-PZ-i14" kind="show" identifier="searchGroupsSegue" id="ArC-6U-3Um"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="searchButton" destination="dLX-Nh-Cm1" id="xaV-QJ-l2r"/>
-                        <outlet property="tableView" destination="YIh-JU-dGE" id="2ZD-zS-hUy"/>
+                        <outlet property="tableView" destination="YIh-JU-dGE" id="RYQ-c0-xAh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lEI-fm-Rhp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -485,7 +510,7 @@
         <!--Search Groups View Controller-->
         <scene sceneID="EfH-0L-bAl">
             <objects>
-                <viewController id="ifH-PZ-i14" customClass="SearchGroupsViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="searchGroupsStoryBoard" id="ifH-PZ-i14" customClass="SearchGroupsViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VGd-S0-nnu">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -565,7 +590,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="Cbg-fS-nYC" kind="relationship" relationship="rootViewController" id="tZT-Ok-oFt"/>
+                        <segue destination="Cbg-fS-nYC" kind="relationship" relationship="rootViewController" id="G5d-P7-pqe"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TsZ-xu-Zif" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -588,21 +613,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Ko-m4-oXm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2161" y="115"/>
-        </scene>
-        <!--Testing View Controller-->
-        <scene sceneID="xJE-c4-lQC">
-            <objects>
-                <viewController id="HMn-Ph-km5" customClass="TestingViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="aVz-VE-7YM">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="KyW-q2-dkQ"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="13b-7o-gsA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="170" y="895"/>
         </scene>
     </scenes>
     <resources>
