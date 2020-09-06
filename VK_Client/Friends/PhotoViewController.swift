@@ -7,22 +7,64 @@
 //
 
 import UIKit
-
-//var selectedFriend: String?
+import RealmSwift
 
 class PhotoViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var nameField: UITextField!
+//    @IBOutlet weak var nameField: UITextField!
     
+    let realmManager = RealmManager.shared
     var image: UIImage!
-    var photoURLs: [String] = []
+    var userId: Int = 0
+    var token: NotificationToken?
+    
+    private var photos: Results<PhotoItem>? {
+        let results: Results<PhotoItem>? = realmManager?.getObjects().filter("ownerId = " + "\(userId)")
+        return results
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collectionView.delegate = self
         collectionView.dataSource = self
+//        collectionView.isUserInteractionEnabled = true
         
+        loadPhotos()
+        
+        addPhotosObserver()
+    }
+    
+    func loadPhotos() {
+        SessionManager.shared.loadPhotos(token: Session.shared.token, userId: userId) { [weak self] result in
+            switch result {
+            case let .success(photos):
+                let photos = photos.response.items
+                print(photos)
+                DispatchQueue.main.async {
+                    try? self?.realmManager?.add(objects: photos)
+                    self?.collectionView.reloadData()
+                }
+            case let .failure(error):
+                print(error)
+            }
+        }
+    }
+    
+    func addPhotosObserver() {
+        token = photos?.observe { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial(let result):
+                print(result)
+                break
+            case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+                break
+            case .error(let error):
+                print(error)
+                break
+            }
+        }
     }
 }
 
@@ -31,34 +73,16 @@ extension PhotoViewController: UICollectionViewDelegate {
 }
 
 extension PhotoViewController: UICollectionViewDataSource {
-    func loadPhotos (indexpathRow: Int) {
-        SessionManager.shared.loadPhotos(token: Session.shared.token, userId: Session.shared.userID) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case let .success(photos):
-                self.photoURLs = PhotoQuery.getURLsBySize(photosQuery: photos, size: .o)
-//                self.photoURLs = photos.items[indexpathRow].sizes
-            case let .failure(error):
-                print(error)
-            }
-        }
-    }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return friends[selectedFriend!]?.photoCollection.count ?? 1
-        return photoURLs.count
+        return photos?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell: PhotoCell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell else { fatalError() }
+        let url = URL(string: photos![indexPath.row].sizes.last!.url)!
+        cell.photo.sd_setImage(with: url, completed: nil)
         
-//        cell.photo.image = friends[selectedFriend!]!.photoCollection[indexPath.row].image
-//        cell.likeControl.count = friends[selectedFriend!]?.photoCollection[indexPath.row].likesCount as! Int
-//        guard let url: String = getURLOfPicFromSize(photo: photos[indexPath.row], size: .m) else { return cell }
-//        let photosUrls = Photo.getImagesPathBySize(photos: photos, size: .o)
-        let url = photoURLs[indexPath.row]
-        cell.photo.sd_setImage(with: URL(fileURLWithPath: url), completed: nil)
         return cell
     }
     
@@ -66,8 +90,10 @@ extension PhotoViewController: UICollectionViewDataSource {
         guard let vc = storyboard?.instantiateViewController(identifier: "detailedVC") as? DetailedPhotoViewController else {
             fatalError()
         }
-        vc.currentIndex = indexPath.row
-//        vc.imageURLs = Photo.getImagesPathBySize(photos: photos, size: .o)
+        vc.sourceIndex = indexPath.row
+        
+        vc.photoItems = photos
         navigationController?.pushViewController(vc, animated: true)
+        
     }
 }

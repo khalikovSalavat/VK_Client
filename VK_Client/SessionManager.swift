@@ -32,16 +32,23 @@ class SessionManager {
         let path = "/method/photos.get"
         
         var params = parameters
-        params["user_id"] = Session.shared.userID
-        params["fields"] = "id, first_name, last_name, photo_100, online"
+        params["user_id"] = userId
+//        params["fields"] = "id, first_name, last_name, photo_100, online"
+        params["album_id"] = "wall"
         
         SessionManager.session.request(baseUrl + path, method: .get, parameters: params).responseData { response in
+//        SessionManager.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
             guard let data = response.value else { return }
             do {
                 let photos = try JSONDecoder().decode(PhotoQuery.self, from: data)
-                completion!(.success(photos))
+                print("PHOTOS:")
+                print(photos)
+                completion?(.success(photos))
+                print("PRINTING DATA:")
+                print(data)
             } catch {
-                completion!(.failure(error))
+                print(error)
+                completion?(.failure(error))
             }
         }
     }

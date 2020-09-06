@@ -15,6 +15,7 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
     
     var realmManager = RealmManager.shared
     var searchController = UISearchController(searchResultsController: nil)
+    
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Обновление...",
@@ -23,17 +24,19 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         return refreshControl
     }()
     
-    var sections: [Character: [UserItem]] {
-        sectionize(friends: Array(self.friends!))
+    var sections: [Character: [UserItem]]? {
+        guard let friends = self.friends else { return nil }
+        return sectionize(friends: Array(friends))
     }
     
-    var sectionTitles: [Character] {
-        let arr: [Character] = Array(self.sections.keys)
+    var sectionTitles: [Character]? {
+        guard let sections = self.sections else { return nil }
+        let arr: [Character] = Array(self.sections!.keys)
         return arr.sorted { $0 < $1 }
     }
     
     private var friends: Results<UserItem>? {
-        let friends: Results<UserItem>? = realmManager?.getObjects()
+        guard let friends: Results<UserItem>? = realmManager?.getObjects() else { return nil}
         return friends?.sorted(byKeyPath: "lastName", ascending: true)
     }
     private var filteredFriends: Results<UserItem>? {
@@ -41,6 +44,7 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         return friends?.filter("firstName CONTAINS[cd] %@", searchText)
     }
     
+    var token: NotificationToken?
     var searchActive: Bool = false
     var searchText: String {
         searchController.searchBar.text ?? ""
@@ -59,6 +63,8 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         if let friends = friends, friends.isEmpty {
             loadFriends()
         }
+        
+        addFriendsObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,23 +119,40 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
+    
+    func addFriendsObserver() {
+        token = friends?.observe { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial(let results):
+                print(results)
+                return
+            case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                print("results: \(results)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+                return
+            case .error(let error):
+                print(error)
+                return
+            }
+        }
+    }
 }
 
 
 extension FriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard !searchActive else { return nil }
-        return "\(sectionTitles[section])"
+        guard !searchActive, sectionTitles?.count != 0 else { return nil }
+        let title = sectionTitles?[section]
+        return "\(title!)"
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard friends?.count != 0, searchText == "" else { return 0 }
-        return sections[sectionTitles[section]]!.count
+        return (sections?[(sectionTitles?[section])!]!.count)!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         guard friends?.count != 0, searchText == "" else { return 0}
-        return sectionTitles.count
+        return sectionTitles!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -137,7 +160,7 @@ extension FriendsViewController: UITableViewDataSource {
             else { fatalError() }
         guard friends?.count != 0  else { return cell }
         if searchText == "" {
-            let user = sections[sectionTitles[indexPath.section]]![indexPath.row]
+            let user = sections![sectionTitles![indexPath.section]]![indexPath.row]
             cell.nameLabel.text = user.firstName + " " + user.lastName
             let urlString = user.photo100
             let url: URL = URL(string: urlString)!
@@ -155,17 +178,24 @@ extension FriendsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        selectedFriendId = sections[sectionTitles[indexPath.section]]![indexPath.row].id
-        guard let vc = storyboard?.instantiateViewController( identifier: "photoVC") as? PhotoViewController else { return }
-        let cell = tableView.cellForRow(at: indexPath) as! FriendCell
-        let avatar = cell.avatarImage
+//        selectedFriendId = sections![sectionTitles![indexPath.section]]![indexPath.row].id
+        guard let vc = storyboard?.instantiateViewController( identifier: "photoStoryBoard") as? PhotoViewController else { return }
+        if searchText == "" {
+            vc.userId = sections![sectionTitles![indexPath.section]]?[indexPath.row].id as! Int
+        } else {
+            vc.userId = filteredFriends?[indexPath.row].id as! Int
+        }
         
-        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.6, options: [], animations: {
-            avatar?.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
-            avatar?.transform = CGAffineTransform.identity
-            
-        }, completion: { (_) in
-            self.navigationController?.pushViewController(vc, animated: true)
-        } )
+//        let cell = tableView.cellForRow(at: indexPath) as! FriendCell
+//        let avatar = cell.avatarImage
+        
+//        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.6, options: [], animations: {
+//            avatar?.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
+//            avatar?.transform = CGAffineTransform.identity
+//
+//        }, completion: { (_) in
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        } )
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -7,15 +7,36 @@
 //
 
 import UIKit
+import RealmSwift
+import SDWebImage
 
 class DetailedPhotoViewController: UIViewController {
-    var images: [UIImage] = []
+    var images: [UIImage] {
+        var images = [UIImage]()
+        guard let photoItems = photoItems else { return images }
+        for photo in photoItems {
+            let url = URL(string: photo.sizes.last!.url)
+            SDWebImageManager.shared.loadImage(with: url, options: SDWebImageOptions(rawValue: 0), progress: nil) { (image, _, _, _, _, _) in
+                if let image = image {
+                    images.append(image)
+                }
+            }
+        }
+        return images
+    }
+    
+    var sourceIndex: Int = 0
     var currentIndex: Int = 0 {
         didSet {
             currentIndex = currentIndex < 0 ? images.count - 1 : currentIndex
             currentIndex = currentIndex > images.count - 1 ? 0 : currentIndex
         }
     }
+    let realmManager = RealmManager.shared
+    var photoItems: Results<PhotoItem>? //{
+//        guard let photos: Results<PhotoItem>? = realmManager?.getObjects() else { return nil }
+//        return photos
+//    }
     
     private var currentSign = 0
     private var percent: CGFloat = 0
@@ -26,7 +47,7 @@ class DetailedPhotoViewController: UIViewController {
         view.contentMode = .scaleToFill
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.isUserInteractionEnabled = true
+//        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -41,6 +62,7 @@ class DetailedPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        currentIndex = sourceIndex
         layout(imgView: backgrounImageView)
         layout(imgView: imageView)
         setImages()
