@@ -48,6 +48,7 @@ class LikeControl: UIControl {
         updateView()
         animateHeart(view: imageView)
         sendActions(for: .valueChanged)
+        print("HEART TAPPED")
     }
     
     func animateHeart(view: UIView) {

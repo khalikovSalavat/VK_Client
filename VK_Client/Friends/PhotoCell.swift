@@ -10,7 +10,7 @@ import UIKit
 
 class PhotoCell: UICollectionViewCell {
     @IBOutlet weak var photo: UIImageView!
-    var selectedFotoId: Int = 0
+//    var selectedFotoId: Int = 0
     
     let likeControl = LikeControl()
     
@@ -26,5 +26,7 @@ class PhotoCell: UICollectionViewCell {
             likeControl.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ]
         NSLayoutConstraint.activate(likeConstraints)
+//        likeControl.isUserInteractionEnabled = true
+//        superview?.bringSubviewToFront(likeControl)
     }
 }

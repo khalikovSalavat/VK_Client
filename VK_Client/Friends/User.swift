@@ -15,7 +15,7 @@ struct UserQuery: Codable {
 }
 
 struct UserResponse: Codable {
-    var count: Int
+    let count: Int
     var items: [UserItem]
 }
 

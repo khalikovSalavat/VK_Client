@@ -20,6 +20,7 @@ class GroupsViewController: UIViewController {
         let groups: Results<GroupItem>? = realmManager?.getObjects()
         return groups?.sorted(byKeyPath: "name", ascending: true)
     }
+    var token: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,8 @@ class GroupsViewController: UIViewController {
         if let groups = groups, groups.isEmpty {
             loadGroups()
         }
+        
+        addGroupsObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +53,22 @@ class GroupsViewController: UIViewController {
             case let .failure(error):
                 print(error.localizedDescription)
                 fatalError()
+            }
+        }
+    }
+    
+    func addGroupsObserver() {
+        token = groups?.observe { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial(let result):
+                print(result)
+                break
+            case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+                break
+            case .error(let error):
+                print(error)
+                break
             }
         }
     }
