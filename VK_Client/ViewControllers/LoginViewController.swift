@@ -36,7 +36,6 @@ class LoginViewController: UIViewController {
         request.httpMethod = "POST"
         let task = session.dataTask(with: request) { (data, response, error) in
             let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments)
-            print(json)
         }
         task.resume()
     }

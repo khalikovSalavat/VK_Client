@@ -10,21 +10,22 @@ import UIKit
 import RealmSwift
 import SDWebImage
 
-class DetailedPhotoViewController: UIViewController {
-    var images: [UIImage] {
-        var images = [UIImage]()
-        guard let photoItems = photoItems else { return images }
-        for photo in photoItems {
-            let url = URL(string: photo.sizes.last!.url)
-            SDWebImageManager.shared.loadImage(with: url, options: SDWebImageOptions(rawValue: 0), progress: nil) { (image, _, _, _, _, _) in
-                if let image = image {
-                    images.append(image)
-                }
-            }
-        }
-        return images
-    }
+class DetailedPhotoViewController: UIViewController, UIGestureRecognizerDelegate {
+//    var images: [UIImage] {
+//        var images = [UIImage]()
+//        guard let photoItems = photoItems else { return images }
+//        for photo in photoItems {
+//            let url = URL(string: photo.sizes.last!.url)
+//            SDWebImageManager.shared.loadImage(with: url, options: SDWebImageOptions(rawValue: 0), progress: nil) { (image, _, _, _, _, _) in
+//                if let image = image {
+//                    images.append(image)
+//                }
+//            }
+//        }
+//        return images
+//    }
     
+    var images = [UIImage]()
     var sourceIndex: Int = 0
     var currentIndex: Int = 0 {
         didSet {
@@ -47,7 +48,7 @@ class DetailedPhotoViewController: UIViewController {
         view.contentMode = .scaleToFill
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -61,6 +62,7 @@ class DetailedPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let photoItems = photoItems { images = loadPhotos(photos: photoItems)}
         view.backgroundColor = .white
         currentIndex = sourceIndex
         layout(imgView: backgrounImageView)
@@ -68,6 +70,7 @@ class DetailedPhotoViewController: UIViewController {
         setImages()
         
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        gesture.delegate = self
         imageView.addGestureRecognizer(gesture)
     }
     
@@ -176,5 +179,17 @@ class DetailedPhotoViewController: UIViewController {
         default:
             break
         }
+    }
+    
+    func loadPhotos( photos: Results<PhotoItem>) -> [UIImage] {
+        var images = [UIImage]()
+        for photo in photos {
+            guard let urlString = photo.sizes.last?.url else { continue }
+            let url = URL(string: urlString)
+            SDWebImageManager.shared.loadImage(with: url, options: SDWebImageOptions(rawValue: 0), progress: nil) { (image, _, _, _, _, _) in
+                if let image = image { images.append(image) }
+            }
+        }
+        return images
     }
 }

@@ -63,7 +63,6 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         if let friends = friends, friends.isEmpty {
             loadFriends()
         }
-        
         addFriendsObserver()
     }
     
@@ -71,6 +70,10 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         super.viewWillAppear(animated)
         
         loadFriends()
+    }
+    
+    deinit {
+        token?.invalidate()
     }
     
     func loadFriends() {
@@ -121,13 +124,14 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
     }
     
     func addFriendsObserver() {
-        token = friends?.observe { (changes: RealmCollectionChange) in
+        token = friends?.observe { [weak self] (changes: RealmCollectionChange) in
             switch changes {
             case .initial(let results):
-                print(results)
+//                print(results)
                 return
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("results: \(results)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+                self?.loadFriends()
                 return
             case .error(let error):
                 print(error)
@@ -151,7 +155,7 @@ extension FriendsViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard friends?.count != 0, searchText == "" else { return 0}
+        guard friends?.count != 0, searchText == "" else { return 0 }
         return sectionTitles!.count
     }
     

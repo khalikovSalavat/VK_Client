@@ -24,11 +24,8 @@ class UserItem: Object, Codable {
     @objc dynamic var id = 0
     @objc dynamic var firstName = ""
     @objc dynamic var lastName = ""
-    @objc dynamic var photo100 = ""
+    @objc dynamic var photo100 = "https://randomuser.me/api/portraits/women/17.jpg"
     @objc dynamic var online = 0
-//    var isClosed = RealmOptional<Bool>()
-//    @objc dynamic var canAccessClosed = 0
-    @objc dynamic var trackCode = ""
     @objc dynamic var deactivated: String? = ""
     
     override class func primaryKey() -> String? {
@@ -41,9 +38,6 @@ class UserItem: Object, Codable {
         case lastName = "last_name"
         case photo100 = "photo_100"
         case online
-//        case isClosed = "is_closed"
-//        case canAccessClosed = "can_access_closed"
-        case trackCode = "track_code"
         case deactivated
     }
 }

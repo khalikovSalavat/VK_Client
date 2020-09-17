@@ -40,7 +40,6 @@ class PhotoViewController: UIViewController {
             switch result {
             case let .success(photos):
                 let photos = photos.response.items
-                print(photos)
                 DispatchQueue.main.async {
                     try? self?.realmManager?.add(objects: photos)
                     self?.collectionView.reloadData()
@@ -55,7 +54,7 @@ class PhotoViewController: UIViewController {
         token = photos?.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial(let result):
-                print(result)
+//                print(result)
                 break
             case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
@@ -91,9 +90,7 @@ extension PhotoViewController: UICollectionViewDataSource {
             fatalError()
         }
         vc.sourceIndex = indexPath.row
-        
         vc.photoItems = photos
         navigationController?.pushViewController(vc, animated: true)
-        
     }
 }

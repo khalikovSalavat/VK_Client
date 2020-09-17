@@ -22,11 +22,12 @@ class PhotoCell: UICollectionViewCell {
         likeControl.translatesAutoresizingMaskIntoConstraints = false
         
         let likeConstraints = [
-            likeControl.rightAnchor.constraint(equalTo: self.rightAnchor),
+            likeControl.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 40),
             likeControl.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ]
         NSLayoutConstraint.activate(likeConstraints)
 //        likeControl.isUserInteractionEnabled = true
 //        superview?.bringSubviewToFront(likeControl)
+        likeControl.addTarget(self, action: #selector(likeControl.onHeartTapped(_:)), for: .touchUpInside)
     }
 }

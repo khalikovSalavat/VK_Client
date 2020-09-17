@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NewsCell: UITableViewCell {
+class NewsCell_old: UITableViewCell {
     
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -19,8 +19,8 @@ class NewsCell: UITableViewCell {
     
     let likeControl = LikeControl()
     let commentControl = CommentControl()
-    let shareControl = ShareControl()
-    let numberOfViews = NumberOfViews()
+    let shareControl = RepostControl()
+//    let numberOfViews = NumberOfViews()
 //    let loadIndicator = LoadIndicator()
     
     override func awakeFromNib() {
@@ -39,13 +39,13 @@ class NewsCell: UITableViewCell {
         addSubview(likeControl)
         addSubview(commentControl)
         addSubview(shareControl)
-        addSubview(numberOfViews)
+//        addSubview(numberOfViews)
 //        addSubview(loadIndicator)
         
         likeControl.translatesAutoresizingMaskIntoConstraints = false
         commentControl.translatesAutoresizingMaskIntoConstraints = false
         shareControl.translatesAutoresizingMaskIntoConstraints = false
-        numberOfViews.translatesAutoresizingMaskIntoConstraints = false
+//        numberOfViews.translatesAutoresizingMaskIntoConstraints = false
 //        loadIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         [
@@ -62,19 +62,19 @@ class NewsCell: UITableViewCell {
             commentControl.heightAnchor.constraint(equalToConstant: 20),
         ].forEach { $0.isActive = true }
             
-        [
-            shareControl.leftAnchor.constraint(equalTo: commentControl.rightAnchor, constant: 40),
-            shareControl.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 40),
-            shareControl.widthAnchor.constraint(equalToConstant: 20),
-            shareControl.heightAnchor.constraint(equalToConstant: 20),
-        ].forEach { $0.isActive = true }
+//        [
+//            shareControl.leftAnchor.constraint(equalTo: commentControl.rightAnchor, constant: 40),
+//            shareControl.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 40),
+//            shareControl.widthAnchor.constraint(equalToConstant: 20),
+//            shareControl.heightAnchor.constraint(equalToConstant: 20),
+//        ].forEach { $0.isActive = true }
         
-        [
-            numberOfViews.rightAnchor.constraint(equalTo: rightAnchor, constant: -40),
-            numberOfViews.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 40),
-            numberOfViews.widthAnchor.constraint(equalToConstant: 50),
-            numberOfViews.heightAnchor.constraint(equalToConstant: 20),
-        ].forEach { $0.isActive = true }
+//        [
+//            numberOfViews.rightAnchor.constraint(equalTo: rightAnchor, constant: -40),
+//            numberOfViews.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 40),
+//            numberOfViews.widthAnchor.constraint(equalToConstant: 50),
+//            numberOfViews.heightAnchor.constraint(equalToConstant: 20),
+//        ].forEach { $0.isActive = true }
         
 //        [
 //            loadIndicator.rightAnchor.constraint(equalTo: rightAnchor, constant: -40),

@@ -21,7 +21,6 @@ class GroupItem: Object, Codable {
     @objc dynamic var id = 0
     @objc dynamic var name = ""
     @objc dynamic var screenName = ""
-//    @objc dynamic let isClosed = 0
     @objc dynamic var type = ""
     @objc dynamic var isAdmin = 0
     @objc dynamic var isMember = 0
@@ -37,7 +36,6 @@ class GroupItem: Object, Codable {
     enum CodingKeys: String, CodingKey {
         case id, name
         case screenName = "screen_name"
-//        case isClosed = "is_closed"
         case type
         case isAdmin = "is_admin"
         case isMember = "is_member"

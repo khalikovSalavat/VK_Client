@@ -61,7 +61,7 @@ class GroupsViewController: UIViewController {
         token = groups?.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial(let result):
-                print(result)
+//                print(result)
                 break
             case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")

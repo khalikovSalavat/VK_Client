@@ -41,11 +41,7 @@ class SessionManager {
             guard let data = response.value else { return }
             do {
                 let photos = try JSONDecoder().decode(PhotoQuery.self, from: data)
-                print("PHOTOS:")
-                print(photos)
                 completion?(.success(photos))
-                print("PRINTING DATA:")
-                print(data)
             } catch {
                 print(error)
                 completion?(.failure(error))

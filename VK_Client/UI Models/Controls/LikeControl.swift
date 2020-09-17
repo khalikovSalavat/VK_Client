@@ -9,33 +9,21 @@
 import UIKit
 
 class LikeControl: UIControl {
-
     var count: Int = 0
+    private var stackView = UIStackView()
     private let imageView = UIImageView()
     private let countLabel = UILabel()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        stackView = putTwoViewToStack(view1: imageView, view2: countLabel, stackOrientation: .toLeft)
+        
+        imageView.image = UIImage(systemName: "heart")
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         countLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(imageView)
-        addSubview(countLabel)
-
-        let imageViewConstaints = [
-            imageView.rightAnchor.constraint(equalTo: countLabel.leftAnchor),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 20),
-            imageView.heightAnchor.constraint(equalTo: heightAnchor)
-        ]
-
-        let labelConstraints = [
-            countLabel.rightAnchor.constraint(equalTo: rightAnchor),
-            countLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ]
-
-        NSLayoutConstraint.activate(imageViewConstaints + labelConstraints )
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onHeartTapped(_:)))
         addGestureRecognizer(gesture)
@@ -72,6 +60,7 @@ class LikeControl: UIControl {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+//        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
 }
