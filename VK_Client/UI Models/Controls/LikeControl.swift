@@ -16,7 +16,7 @@ class LikeControl: PostCellControl {
     }
     
     var imageNames: [systemImageName : String] = [:]
-    var isActive: Bool = false{
+    var isActive: Bool = false {
         didSet {
             let name = isActive ? imageNames[.active] : imageNames[.notActive]
             imageView.image = UIImage(systemName: name ?? "ant")
@@ -24,18 +24,19 @@ class LikeControl: PostCellControl {
     }
     
     override func awakeFromNib() {
-        
         imageNames[.active] = "heart.fill"
         imageNames[.notActive] = "heart"
         
         super.awakeFromNib()
-        
     }
 
     override func stackTapped() {
         super.stackTapped()
         
         isActive = !isActive
+        let change = isActive == true ? 1 : -1
+        count += change
+        animateImage(view: imageView)
     }
     
     func animateImage(view: UIView) {

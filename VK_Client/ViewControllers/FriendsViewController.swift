@@ -77,13 +77,14 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
     }
     
     func loadFriends() {
-        SessionManager.shared.loadFriends(token: Session.shared.token, userId: Session.shared.userID) { [weak self] result in
+        SessionManager.shared.loadData(methodType: .friends, type: UserQuery.self) {
+            [weak self] result in
             guard let self = self else { return }
             switch result {
-            case let .success(users):
-                let userItems = users.response.items
+            case let .success(userQuery):
+                let users = (userQuery as! UserQuery).response.items
                 DispatchQueue.main.async {
-                    try? self.realmManager?.add(objects: userItems)
+                    try? self.realmManager?.add(objects: users)
                     self.tableView.reloadData()
                 }
             case let .failure(error):
@@ -130,8 +131,8 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
 //                print(results)
                 return
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("results: \(results)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
-                self?.loadFriends()
+//                print("results: \(results)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+//                self?.loadFriends()
                 return
             case .error(let error):
                 print(error)

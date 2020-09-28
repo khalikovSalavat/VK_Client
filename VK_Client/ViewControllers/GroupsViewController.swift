@@ -41,18 +41,33 @@ class GroupsViewController: UIViewController {
     }
     
     func loadGroups() {
-        SessionManager.shared.loadGroups(token: Session.shared.token, userId: Session.shared.userID) { [weak self] result in
+//        SessionManager.shared.loadGroups(token: Session.shared.token, userId: Session.shared.userID) { [weak self] result in
+//            guard let self = self else { return }
+//            switch result {
+//            case let .success(groups):
+//                let groupItems = groups.response.items
+//                DispatchQueue.main.async {
+//                    try? self.realmManager?.add(objects: groupItems)
+//                    self.tableView.reloadData()
+//                }
+//            case let .failure(error):
+//                print(error.localizedDescription)
+//                fatalError()
+//            }
+//        }
+        
+        SessionManager.shared.loadData(methodType: .groups, type: GroupQuery.self) {
+            [weak self] result in
             guard let self = self else { return }
             switch result {
-            case let .success(groups):
-                let groupItems = groups.response.items
+            case let .success(groupQuery):
+                let groupItems = (groupQuery as! GroupQuery).response.items
                 DispatchQueue.main.async {
                     try? self.realmManager?.add(objects: groupItems)
                     self.tableView.reloadData()
                 }
             case let .failure(error):
-                print(error.localizedDescription)
-                fatalError()
+                print(error)
             }
         }
     }
@@ -64,7 +79,7 @@ class GroupsViewController: UIViewController {
 //                print(result)
                 break
             case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+//                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
                 break
             case .error(let error):
                 print(error)

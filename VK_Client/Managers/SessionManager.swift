@@ -9,6 +9,14 @@
 import Foundation
 import Alamofire
 
+enum VKMethodType: String {
+    case photos
+    case friends
+    case groups
+    case newsfeed
+}
+
+
 class SessionManager {
     static var shared = SessionManager()
     
@@ -26,77 +34,103 @@ class SessionManager {
         return session
     }()
     
-    func loadPhotos( token: String, userId: Int,
-                     completion: ((Result<PhotoQuery, Error>) -> Void)?) {
+    
+    func getQueryParams( methodType: VKMethodType) -> Parameters {
+        switch methodType {
+        case .photos:
+            return [
+                "access_token" : Session.shared.token,
+                "user_id" : Session.shared.userID,
+                "v" : "5.77",
+                "album_id" : "wall",
+                "extended" : 1,
+                "count" : 10,
+            ]
+        case .friends:
+            return [
+                "access_token" : Session.shared.token,
+                "user_id" : Session.shared.userID,
+                "v" : "5.92",
+                "fields" : "id, first_name, last_name, photo_100, online",
+            ]
+        case .groups:
+            return [
+                "access_token" : Session.shared.token,
+                "user_id" : Session.shared.userID,
+                "v" : "5.92",
+                "fields" : "name",
+                "extended" : 1,
+            ]
+        case .newsfeed:
+            return [
+                "access_token" : Session.shared.token,
+                "start_time" : getUnixTime(subtractDays: 10)!,
+                "v" : "5.21",
+                "filters" : "post",
+            ]
+        }
+    }
+    
+    
+    func getUnixTime(subtractDays count: Int) -> String?  {
+        let date = Calendar.current.date(byAdding: .day, value: -1 * count, to: Date())! as NSDate
+        let unixTime = UInt(date.timeIntervalSince1970)
+        return "\(unixTime)"
+    }
+    
+    
+    func loadData<T: Decodable>( token: String = Session.shared.token,
+                   methodType: VKMethodType,
+                   type: T.Type,
+                   additionalParams: Parameters? = nil,
+                   completion: ((Result<Any, Error>) -> Void)?) {
+        
         let baseUrl = "https://api.vk.com"
-        let path = "/method/photos.get"
+        let path = "/method/" + methodType.rawValue + ".get"
+        var params = getQueryParams(methodType: methodType)
         
-        var params = parameters
-        params["user_id"] = userId
-//        params["fields"] = "id, first_name, last_name, photo_100, online"
-        params["album_id"] = "wall"
+        if let addParams = additionalParams {
+            addParams.forEach { params[$0.key] = $0.value }
+        }
         
-        SessionManager.session.request(baseUrl + path, method: .get, parameters: params).responseData { response in
-//        SessionManager.session.request(baseUrl + path, method: .get, parameters: params).responseJSON { response in
+        SessionManager.session.request( baseUrl + path, method: .get, parameters: params).responseData { response in
             guard let data = response.value else { return }
             do {
-                let photos = try JSONDecoder().decode(PhotoQuery.self, from: data)
-                completion?(.success(photos))
+                let model = try JSONDecoder().decode(type.self, from: data)
+                completion? (.success(model))
             } catch {
-                print(error)
-                completion?(.failure(error))
+                completion? (.failure(error))
             }
         }
     }
     
-    func loadFriends( token: String, userId: Int, completion: ((Result<UserQuery,Error>) -> Void)? = nil) {
-        let baseURL = "https://api.vk.com"
-        let path = "/method/friends.get"
+    
+    func addLike( ownerId: Int,
+                  itemId: Int,
+                  v: String = "5.124",
+                  type: String = "post",
+                  completion: ((Result<Any, Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.vk.com"
+        let path = "/method/likes.get"
         
-        var params = parameters
-        params["user_id"] = Session.shared.userID
-        params["extended"] = nil
-        params["fields"] = "id, first_name, last_name, photo_100, online"
+        let params: Parameters = [
+            "access_token" : Session.shared.token,
+            "owner_id" : ownerId,
+            "item_id" : itemId,
+            "v" : "5.124",
+            "type" : type,
+        ]
         
-        SessionManager.session.request(baseURL + path, method: .get, parameters: params).responseData { response in
+        SessionManager.session.request( baseUrl + path, method: .get, parameters: params).responseData { response in
             guard let data = response.value else { return }
             do {
-                let users = try JSONDecoder().decode(UserQuery.self, from: data)
-                completion?(.success(users))
+                let likesResponse = try JSONDecoder().decode([String : [String : Int]].self, from: data)
+                let likesCount: Int = likesResponse["response"]?["likes"] ?? -1
+                completion? (.success(likesCount))
             } catch {
-                completion?(.failure(error))
+                completion? (.failure(error))
             }
         }
-    }
-    
-    func loadGroups( token: String, userId: Int, completion: ((Result<GroupQuery, Error>) -> Void)? = nil) {
-        let baseURL = "https://api.vk.com"
-        let path = "/method/groups.get"
         
-        var params = parameters
-        params["user_id"] = userId
-        params["fields"] = "name"
-        
-        SessionManager.session.request(baseURL + path, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            do {
-                let groups = try JSONDecoder().decode(GroupQuery.self, from: data)
-                completion?(.success(groups))
-            } catch {
-                completion?(.failure(error))
-            }
-        }
     }
-    
-//    func loadFilteredGroups( token: String, mask: String) {
-//        let baseURL = "https://api.vk.com"
-//        let path = "/method/groups.search"
-//
-//        var params = parameters
-//        params["q"] = mask
-//
-//        SessionManager.session.request(baseURL + path, method: .get, parameters: params).responseJSON { response in
-//            guard let data = response.value else { return }
-//        }
-//    }
 }

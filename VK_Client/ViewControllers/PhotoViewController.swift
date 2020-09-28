@@ -36,13 +36,18 @@ class PhotoViewController: UIViewController {
     }
     
     func loadPhotos() {
-        SessionManager.shared.loadPhotos(token: Session.shared.token, userId: userId) { [weak self] result in
+        
+        let params = ["user_id" : userId]
+        
+        SessionManager.shared.loadData(methodType: .photos, type: PhotoQuery.self, additionalParams: params) {
+            [weak self] result in
+            guard let self = self else { return }
             switch result {
-            case let .success(photos):
-                let photos = photos.response.items
+            case let .success(photosQuery):
+                let photos = (photosQuery as! PhotoQuery).response.items
                 DispatchQueue.main.async {
-                    try? self?.realmManager?.add(objects: photos)
-                    self?.collectionView.reloadData()
+                    try? self.realmManager?.add(objects: photos)
+                    self.collectionView.reloadData()
                 }
             case let .failure(error):
                 print(error)
@@ -57,7 +62,7 @@ class PhotoViewController: UIViewController {
 //                print(result)
                 break
             case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
+//                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
                 break
             case .error(let error):
                 print(error)

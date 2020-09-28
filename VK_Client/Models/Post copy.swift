@@ -9,12 +9,12 @@
 import Foundation
 
 // MARK: - NewsFeed
-struct NewsFeed: Codable {
-    let response: Response
+struct NewsfeedQuery: Codable {
+    let response: NewsResponse
 }
 
 // MARK: - Response
-struct Response: Codable {
+struct NewsResponse: Codable {
     let items: [ResponseItem]?
     let profiles: [Profile]?
     let groups: [Group]?
@@ -28,12 +28,12 @@ struct Response: Codable {
 
 // MARK: - Group
 struct Group: Codable {
-    let id: Int
-    let name, screenName: String
-    let isClosed: Int
-    let type: String
-    let isAdmin, isMember, isAdvertiser: Int
-    let photo50, photo100, photo200: String
+    let id: Int?
+    let name, screenName: String?
+    let isClosed: Int?
+    let type: String?
+    let isAdmin, isMember, isAdvertiser: Int?
+    let photo50, photo100, photo200: String?
 
     enum CodingKeys: String, CodingKey {
         case id, name
@@ -51,10 +51,10 @@ struct Group: Codable {
 
 // MARK: - ResponseItem
 struct ResponseItem: Codable {
-    let sourceID, date: Int
+    let sourceID, date: Int?
     let audio: ItemAudio?
     let postID: Int?
-    let type: PostTypeEnum
+    let type: PostTypeEnum?
     let canDoubtCategory, canSetCategory: Bool?
     let postType: PostTypeEnum?
     let text: String?
@@ -101,16 +101,16 @@ struct Attachment: Codable {
 
 // MARK: - AudioElement
 struct AudioElement: Codable {
-    let artist: String
-    let id, ownerID: Int
-    let title: String
-    let duration: Int
-    let isExplicit, isFocusTrack: Bool
-    let trackCode: String
-    let url: String
-    let date: Int
+    let artist: String?
+    let id, ownerID: Int?
+    let title: String?
+    let duration: Int?
+    let isExplicit, isFocusTrack: Bool?
+    let trackCode: String?
+    let url: String?
+    let date: Int?
     let mainArtists: [MainArtist]?
-    let shortVideosAllowed, storiesAllowed, storiesCoverAllowed: Bool
+    let shortVideosAllowed, storiesAllowed, storiesCoverAllowed: Bool?
     let albumID, genreID, lyricsID: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -133,7 +133,7 @@ struct AudioElement: Codable {
 
 // MARK: - MainArtist
 struct MainArtist: Codable {
-    let name, domain, id: String
+    let name, domain, id: String?
 }
 
 // MARK: - Link
@@ -306,6 +306,7 @@ struct FriendsItem: Codable {
     }
 }
 
+
 // MARK: - PurpleLikes
 struct PurpleLikes: Codable {
     let count, userLikes, canLike, canPublish: Int?
@@ -405,7 +406,7 @@ enum PostTypeEnum: String, Codable {
 
 // MARK: - FluffyReposts
 struct FluffyReposts: Codable {
-    let count, wallCount, mailCount, userReposted: Int
+    let count, wallCount, mailCount, userReposted: Int?
 
     enum CodingKeys: String, CodingKey {
         case count
