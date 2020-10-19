@@ -115,10 +115,8 @@ class DetailedPhotoViewController: UIViewController, UIGestureRecognizerDelegate
         interactiveAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
             let width = CGFloat(self.currentSign) * self.view.frame.width
             let translationTranform = CGAffineTransform(translationX: width, y: 0)
-            let angle = CGFloat(self.currentSign) * 0.8
-            
+//            let angle = CGFloat(self.currentSign) * 0.8
 //            let angleTransform = CGAffineTransform(rotationAngle: angle)
-            
 //            self.imageView.transform = angleTransform.concatenating(translationTranform)
             self.imageView.transform = translationTranform
             

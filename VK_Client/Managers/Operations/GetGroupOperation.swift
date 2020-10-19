@@ -32,17 +32,6 @@ class GetGroupOperation: AsyncOperation {
             self?.data = response.data
             self?.state = .finished
         }
-//        SessionManager.shared.loadData(methodType: .groups, type: Data.self) {
-//            [weak self] result in
-//            switch result {
-//            case let .success(data):
-//                self?.data = data as? Data
-//                print(self?.data as Any)
-//            case let .failure(error):
-//                print(error)
-//            }
-//            self?.state = .finished
-//        }
     }
     
 }

@@ -11,7 +11,7 @@ import SDWebImage
 
 class NewsViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     var news = NewsResponse(items: nil, profiles: nil, groups: nil, nextFrom: nil) {
         didSet {
             DispatchQueue.global().async(group: dispatchGroup) {

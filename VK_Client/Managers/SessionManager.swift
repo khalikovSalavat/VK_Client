@@ -67,13 +67,13 @@ class SessionManager {
                 "start_time" : getUnixTime(subtractDays: 10)!,
                 "v" : "5.111",//"5.21",
                 "count" : 100,
-                "filters" : "post, photo, wall_photo, note"
+                "filters" : "post"
             ]
         }
     }
     
     
-    func getUnixTime(subtractDays count: Int) -> String?  {
+    private func getUnixTime(subtractDays count: Int) -> String?  {
         let date = Calendar.current.date(byAdding: .day, value: -1 * count, to: Date())! as NSDate
         let unixTime = UInt(date.timeIntervalSince1970)
         return "\(unixTime)"

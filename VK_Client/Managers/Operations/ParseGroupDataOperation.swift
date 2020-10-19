@@ -19,7 +19,7 @@ class ParseGroupDataOperation: Operation {
             let groupQuery = try JSONDecoder().decode(GroupQuery.self, from: data)
             output = groupQuery.response.items
         } catch {
-            print("PARSE GROUPS DATA OPERATION ERROR: \(error)")
+            print("\(error)")
         }
     }
 }

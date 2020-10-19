@@ -12,7 +12,7 @@ import PromiseKit
 
 class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewDelegate, UISearchResultsUpdating {
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
     var realmManager = RealmManager.shared
     var searchController = UISearchController(searchResultsController: nil)
@@ -170,14 +170,6 @@ extension FriendsViewController: UITableViewDataSource {
         guard let vc = storyboard?.instantiateViewController( identifier: "photoStoryBoard") as? PhotoViewController else { return }
         vc.userId = sections![sectionTitles![indexPath.section]]?[indexPath.row].id ?? 0
         self.navigationController?.pushViewController(vc, animated: true)
-//        if searchText == "" {
-//            vc.userId = sections![sectionTitles![indexPath.section]]?[indexPath.row].id as! Int
-//        } else {
-//            vc.userId = filteredFriends?[indexPath.row].id as! Int
-//        }
-        
-//        let cell = tableView.cellForRow(at: indexPath) as! FriendCell
-//        let avatar = cell.avatarImage
         
 //        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.6, options: [], animations: {
 //            avatar?.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)

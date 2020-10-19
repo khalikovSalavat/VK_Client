@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class PhotoViewController: UIViewController {
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionView: UICollectionView!
 //    @IBOutlet weak var nameField: UITextField!
     
     let realmManager = RealmManager.shared

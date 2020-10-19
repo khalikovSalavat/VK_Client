@@ -14,7 +14,7 @@ import Alamofire
 class GroupsViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchButton: UIBarButtonItem!
+//    @IBOutlet weak var searchButton: UIBarButtonItem!
     
     let realmManager = RealmManager.shared
     private var groups: Results<GroupItem>? {
@@ -119,10 +119,10 @@ extension GroupsViewController: UITableViewDelegate {
 extension GroupsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let count: Int = groups?.count, groups?.count != 0 else {
-            searchButton.isEnabled = false
+//            searchButton.isEnabled = false
             return 0
         }
-        searchButton.isEnabled = true
+//        searchButton.isEnabled = true
         return count
     }
     

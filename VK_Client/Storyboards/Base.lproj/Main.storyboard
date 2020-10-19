@@ -530,16 +530,8 @@
                             <constraint firstItem="IJR-5v-GYy" firstAttribute="bottom" secondItem="YIh-JU-dGE" secondAttribute="bottom" id="xXd-sn-gD2"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="AHT-Ng-LIT">
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="dLX-Nh-Cm1">
-                            <connections>
-                                <action selector="openSearchGroupsViewController" destination="Cbg-fS-nYC" id="Wfm-Ln-wgN"/>
-                                <segue destination="ifH-PZ-i14" kind="show" identifier="searchGroupsSegue" id="ArC-6U-3Um"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="AHT-Ng-LIT"/>
                     <connections>
-                        <outlet property="searchButton" destination="dLX-Nh-Cm1" id="xaV-QJ-l2r"/>
                         <outlet property="tableView" destination="YIh-JU-dGE" id="RYQ-c0-xAh"/>
                     </connections>
                 </viewController>
@@ -552,11 +544,11 @@
             <objects>
                 <viewController storyboardIdentifier="searchGroupsStoryBoard" id="ifH-PZ-i14" customClass="SearchGroupsViewController" customModule="VK_Client" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VGd-S0-nnu">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Zj3-RH-tyP">
-                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="groupCell" rowHeight="60" id="QzQ-gA-LGe" customClass="GroupCell" customModule="VK_Client" customModuleProvider="target">
