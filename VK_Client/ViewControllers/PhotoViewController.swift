@@ -28,7 +28,6 @@ class PhotoViewController: UIViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
-//        collectionView.isUserInteractionEnabled = true
         
         loadPhotos()
         
@@ -58,10 +57,10 @@ class PhotoViewController: UIViewController {
     func addPhotosObserver() {
         token = photos?.observe { (changes: RealmCollectionChange) in
             switch changes {
-            case .initial(let result):
+            case .initial( _):
 //                print(result)
                 break
-            case .update(let result, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+            case .update( _, deletions: let _, insertions: let _, modifications: let _):
 //                print("results: \(result)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
                 break
             case .error(let error):

@@ -24,6 +24,7 @@ class UserItem: Object, Codable {
     @objc dynamic var id = 0
     @objc dynamic var firstName = ""
     @objc dynamic var lastName = ""
+    @objc dynamic var photo50 = ""
     @objc dynamic var photo100 = ""
     @objc dynamic var online = 0
     @objc dynamic var deactivated: String? = ""
@@ -36,6 +37,7 @@ class UserItem: Object, Codable {
         case id
         case firstName = "first_name"
         case lastName = "last_name"
+        case photo50 = "photo_50"
         case photo100 = "photo_100"
         case online
         case deactivated

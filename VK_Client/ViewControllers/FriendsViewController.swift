@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import PromiseKit
 
 class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewDelegate, UISearchResultsUpdating {
     
@@ -25,27 +26,26 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
     }()
     
     var sections: [Character: [UserItem]]? {
-        guard let friends = self.friends else { return nil }
-        return sectionize(friends: Array(friends))
+        guard let filteredFriends = self.filteredFriends else { return nil }
+        return sectionize(friends: Array(filteredFriends))
     }
     
     var sectionTitles: [Character]? {
-        guard let sections = self.sections else { return nil }
+        guard self.sections != nil else { return nil }
         let arr: [Character] = Array(self.sections!.keys)
         return arr.sorted { $0 < $1 }
     }
     
     private var friends: Results<UserItem>? {
-        guard let friends: Results<UserItem>? = realmManager?.getObjects() else { return nil}
-        return friends?.sorted(byKeyPath: "lastName", ascending: true)
+        guard let friends: Results<UserItem> = realmManager?.getObjects() else { return nil}
+        return friends.sorted(byKeyPath: "lastName", ascending: true)
     }
     private var filteredFriends: Results<UserItem>? {
-        guard searchText != "" else { return friends }
-        return friends?.filter("firstName CONTAINS[cd] %@", searchText)
+        guard !searchText.isEmpty else { return friends }
+        return friends?.filter("firstName CONTAINS %@", searchText)
     }
     
     var token: NotificationToken?
-    var searchActive: Bool = false
     var searchText: String {
         searchController.searchBar.text ?? ""
     }
@@ -58,7 +58,10 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         tableView.refreshControl = refreshControl
         
         searchController.searchResultsUpdater = self
-        tableView.tableHeaderView = searchController.searchBar
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
+        
+//        tableView.tableHeaderView = searchController.searchBar
         
         if let friends = friends, friends.isEmpty {
             loadFriends()
@@ -76,7 +79,7 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
         token?.invalidate()
     }
     
-    func loadFriends() {
+    func loadFriends_old() {
         SessionManager.shared.loadData(methodType: .friends, type: UserQuery.self) {
             [weak self] result in
             guard let self = self else { return }
@@ -107,14 +110,7 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
-        if text == "" {
-            searchActive = false
-            self.tableView.reloadData()
-        } else {
-            searchActive = true
-            self.tableView.reloadData()
-        }
+        self.tableView.reloadData()
     }
     
     @objc private func refresh(_ sender: UIRefreshControl) {
@@ -125,14 +121,11 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
     }
     
     func addFriendsObserver() {
-        token = friends?.observe { [weak self] (changes: RealmCollectionChange) in
+        token = friends?.observe { (changes: RealmCollectionChange) in
             switch changes {
-            case .initial(let results):
-//                print(results)
+            case .initial(_):
                 return
-            case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-//                print("results: \(results)\ndeletions:\(deletions)\ninsertions:\(insertions)\nmodifications:\(modifications)")
-//                self?.loadFriends()
+            case .update(_, _, _, _):
                 return
             case .error(let error):
                 print(error)
@@ -145,51 +138,43 @@ class FriendsViewController: UIViewController, CAAnimationDelegate, UITableViewD
 
 extension FriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard !searchActive, sectionTitles?.count != 0 else { return nil }
+        guard sectionTitles?.count != 0 else { return nil }
         let title = sectionTitles?[section]
         return "\(title!)"
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard friends?.count != 0, searchText == "" else { return 0 }
+        guard filteredFriends?.count != 0  else { return 0 }
         return (sections?[(sectionTitles?[section])!]!.count)!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard friends?.count != 0, searchText == "" else { return 0 }
-        return sectionTitles!.count
+        guard filteredFriends?.count != 0 else { return 0 }
+            return sectionTitles!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell") as? FriendCell
-            else { fatalError() }
-        guard friends?.count != 0  else { return cell }
-        if searchText == "" {
-            let user = sections![sectionTitles![indexPath.section]]![indexPath.row]
-            cell.nameLabel.text = user.firstName + " " + user.lastName
-            let urlString = user.photo100
-            let url: URL = URL(string: urlString)!
-            cell.avatarImage.sd_setImage(with: url, completed: nil)
-            return cell
-        } else {
-            let user = filteredFriends![indexPath.row]
-            cell.nameLabel.text = user.firstName + " " + user.lastName
-            let urlString = user.photo100
-            let url: URL = URL(string: urlString)!
-            cell.avatarImage.sd_setImage(with: url, completed: nil)
-            return cell
-        }
+        else { return UITableViewCell() }
+        
+        let user = sections![sectionTitles![indexPath.section]]![indexPath.row]
+        cell.nameLabel.text = user.firstName + " " + user.lastName
+        let urlString = user.photo100
+        let url: URL = URL(string: urlString)!
+        cell.avatarImage.sd_setImage(with: url, completed: nil)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-//        selectedFriendId = sections![sectionTitles![indexPath.section]]![indexPath.row].id
         guard let vc = storyboard?.instantiateViewController( identifier: "photoStoryBoard") as? PhotoViewController else { return }
-        if searchText == "" {
-            vc.userId = sections![sectionTitles![indexPath.section]]?[indexPath.row].id as! Int
-        } else {
-            vc.userId = filteredFriends?[indexPath.row].id as! Int
-        }
+        vc.userId = sections![sectionTitles![indexPath.section]]?[indexPath.row].id ?? 0
+        self.navigationController?.pushViewController(vc, animated: true)
+//        if searchText == "" {
+//            vc.userId = sections![sectionTitles![indexPath.section]]?[indexPath.row].id as! Int
+//        } else {
+//            vc.userId = filteredFriends?[indexPath.row].id as! Int
+//        }
         
 //        let cell = tableView.cellForRow(at: indexPath) as! FriendCell
 //        let avatar = cell.avatarImage
@@ -201,6 +186,41 @@ extension FriendsViewController: UITableViewDataSource {
 //        }, completion: { (_) in
 //            self.navigationController?.pushViewController(vc, animated: true)
 //        } )
-        self.navigationController?.pushViewController(vc, animated: true)
+//        self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension FriendsViewController {
+    func loadFriends() {
+        firstly {
+            loadAndParseData()
+        }.done { [weak self] users in
+            guard let self = self else { return }
+            self.writeData(users: users)
+        }.catch { error in
+            print(error)
+        }
+    }
+    
+    
+    func loadAndParseData() -> Promise<[UserItem]> {
+        return Promise { resolver in
+            SessionManager.shared.loadData(methodType: .friends, type: UserQuery.self) {
+                result in
+                switch result {
+                case let .success(userQuery):
+                    let users: [UserItem] = (userQuery as! UserQuery).response.items
+                    return resolver.fulfill(users)
+                case let .failure(error):
+                    return resolver.reject(error)
+                }
+            }
+        }
+    }
+    
+    
+    func writeData(users: [UserItem]) {
+        try? realmManager?.add(objects: users)
+        self.tableView.reloadData()
     }
 }

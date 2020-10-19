@@ -44,6 +44,7 @@ class PostCellControl: UIStackView {
     
     @objc func stackTapped() {
         print(String(describing: self))
+//        let cell = superview?.superview?.superview as? PostCell
     }
     
     

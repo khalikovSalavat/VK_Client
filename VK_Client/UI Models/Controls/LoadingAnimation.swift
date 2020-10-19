@@ -9,8 +9,8 @@
 import UIKit
 
 class LoadingAnimation: UIView {
-    var circle = UIView()
-    var radius: CGFloat = 5
+    private var circle = UIView()
+    private var radius: CGFloat = 5
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +22,7 @@ class LoadingAnimation: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func animateCircle() {
+    private func animateCircle() {
         UIView.animate(withDuration: 0.5, delay: 0, options: [.autoreverse], animations: {
             self.circle.layer.opacity = 1
         }, completion: { (_) in

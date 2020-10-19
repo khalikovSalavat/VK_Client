@@ -62,7 +62,9 @@ class DetailedPhotoViewController: UIViewController, UIGestureRecognizerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let photoItems = photoItems { images = loadPhotos(photos: photoItems)}
+        if let photoItems = photoItems {
+            images = loadPhotos(photos: photoItems)
+        }
         view.backgroundColor = .white
         currentIndex = sourceIndex
         layout(imgView: backgrounImageView)

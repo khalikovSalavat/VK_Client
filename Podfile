@@ -9,5 +9,6 @@ target 'VK_Client' do
   pod 'RealmSwift', '=5.3.5'
   pod 'Alamofire', '=5.2.2'
   pod 'SDWebImage', '=5.8.4'
+  pod 'PromiseKit', '~>6.8'
 
 end

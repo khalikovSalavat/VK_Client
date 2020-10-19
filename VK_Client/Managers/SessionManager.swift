@@ -42,7 +42,7 @@ class SessionManager {
                 "access_token" : Session.shared.token,
                 "user_id" : Session.shared.userID,
                 "v" : "5.77",
-                "album_id" : "wall",
+                "album_id" : "profile",
                 "extended" : 1,
                 "count" : 10,
             ]
@@ -51,7 +51,7 @@ class SessionManager {
                 "access_token" : Session.shared.token,
                 "user_id" : Session.shared.userID,
                 "v" : "5.92",
-                "fields" : "id, first_name, last_name, photo_100, online",
+                "fields" : "id, first_name, last_name, photo_50, photo_100, online",
             ]
         case .groups:
             return [
@@ -65,8 +65,9 @@ class SessionManager {
             return [
                 "access_token" : Session.shared.token,
                 "start_time" : getUnixTime(subtractDays: 10)!,
-                "v" : "5.21",
-                "filters" : "post",
+                "v" : "5.111",//"5.21",
+                "count" : 100,
+                "filters" : "post, photo, wall_photo, note"
             ]
         }
     }
@@ -93,7 +94,14 @@ class SessionManager {
             addParams.forEach { params[$0.key] = $0.value }
         }
         
-        SessionManager.session.request( baseUrl + path, method: .get, parameters: params).responseData { response in
+//        if methodType == .photos {
+//            SessionManager.session.request( baseUrl + path, method: .get, parameters: params).responseJSON(queue: DispatchQueue.global()) { response in
+//                let json = response.value
+//                print(json)
+//            }
+//        }
+        
+        SessionManager.session.request( baseUrl + path, method: .get, parameters: params).responseData(queue: DispatchQueue.global()) { response in
             guard let data = response.value else { return }
             do {
                 let model = try JSONDecoder().decode(type.self, from: data)
@@ -109,9 +117,10 @@ class SessionManager {
                   itemId: Int,
                   v: String = "5.124",
                   type: String = "post",
+                  accessKey: String? = nil,
                   completion: ((Result<Any, Error>) -> Void)? = nil) {
         let baseUrl = "https://api.vk.com"
-        let path = "/method/likes.get"
+        let path = "/method/likes.add"
         
         let params: Parameters = [
             "access_token" : Session.shared.token,
@@ -121,7 +130,7 @@ class SessionManager {
             "type" : type,
         ]
         
-        SessionManager.session.request( baseUrl + path, method: .get, parameters: params).responseData { response in
+        SessionManager.session.request( baseUrl + path, method: .post, parameters: params).responseData { response in
             guard let data = response.value else { return }
             do {
                 let likesResponse = try JSONDecoder().decode([String : [String : Int]].self, from: data)

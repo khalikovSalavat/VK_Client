@@ -9,10 +9,10 @@
 import UIKit
 
 class FriendCell: UITableViewCell {
-//    @IBOutlet weak var icon: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var avatarView: UIView!
-    @IBOutlet weak var avatarImage: UIImageView!
+//    @IBOutlet private weak var icon: UIImageView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var avatarView: UIView!
+    @IBOutlet private weak var avatarImage: UIImageView!
     @IBInspectable var radius: Int = 35
     var friendID: String?
     

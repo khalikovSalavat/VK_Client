@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import Alamofire
 
 class GroupsViewController: UIViewController {
     
@@ -37,39 +38,41 @@ class GroupsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadGroups()
+//        loadGroups()
     }
     
     func loadGroups() {
-//        SessionManager.shared.loadGroups(token: Session.shared.token, userId: Session.shared.userID) { [weak self] result in
+        
+        let queue = OperationQueue()
+        
+        let request = AF.request("https://api.vk.com/method/groups.get", method: .get, parameters: SessionManager.shared.getQueryParams(methodType: .groups))
+        
+        let getGroupDataOperation = GetGroupOperation(request: request)
+        queue.addOperation(getGroupDataOperation)
+        
+        let parseGroupDataOperation = ParseGroupDataOperation()
+        parseGroupDataOperation.addDependency(getGroupDataOperation)
+        queue.addOperation(parseGroupDataOperation)
+        
+        let reloadGroupTableControllerOperation = ReloadGroupTableController(controller: self)
+        reloadGroupTableControllerOperation.addDependency(parseGroupDataOperation)
+        OperationQueue.main.addOperation(reloadGroupTableControllerOperation)
+        
+        
+//        SessionManager.shared.loadData(methodType: .groups, type: GroupQuery.self) {
+//            [weak self] result in
 //            guard let self = self else { return }
 //            switch result {
-//            case let .success(groups):
-//                let groupItems = groups.response.items
+//            case let .success(groupQuery):
+//                let groupItems = (groupQuery as! GroupQuery).response.items
 //                DispatchQueue.main.async {
 //                    try? self.realmManager?.add(objects: groupItems)
 //                    self.tableView.reloadData()
 //                }
 //            case let .failure(error):
-//                print(error.localizedDescription)
-//                fatalError()
+//                print(error)
 //            }
 //        }
-        
-        SessionManager.shared.loadData(methodType: .groups, type: GroupQuery.self) {
-            [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case let .success(groupQuery):
-                let groupItems = (groupQuery as! GroupQuery).response.items
-                DispatchQueue.main.async {
-                    try? self.realmManager?.add(objects: groupItems)
-                    self.tableView.reloadData()
-                }
-            case let .failure(error):
-                print(error)
-            }
-        }
     }
     
     func addGroupsObserver() {

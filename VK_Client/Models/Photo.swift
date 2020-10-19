@@ -67,6 +67,6 @@ class Likes: Object, Codable {
     }
 }
 
-class Reposts: Object, Codable {
-    @objc dynamic var count = 0
-}
+//class Reposts: Object, Codable {
+//    @objc dynamic var count = 0
+//}

@@ -1,5 +1,14 @@
 PODS:
   - Alamofire (5.2.2)
+  - PromiseKit (6.13.1):
+    - PromiseKit/CorePromise (= 6.13.1)
+    - PromiseKit/Foundation (= 6.13.1)
+    - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/CorePromise (6.13.1)
+  - PromiseKit/Foundation (6.13.1):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.13.1):
+    - PromiseKit/CorePromise
   - Realm (5.3.5):
     - Realm/Headers (= 5.3.5)
   - Realm/Headers (5.3.5)
@@ -10,23 +19,26 @@ PODS:
   - SDWebImage/Core (5.8.4)
 
 DEPENDENCIES:
-  - Alamofire
+  - Alamofire (= 5.2.2)
+  - PromiseKit (~> 6.8)
   - RealmSwift (= 5.3.5)
-  - SDWebImage
+  - SDWebImage (= 5.8.4)
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - PromiseKit
     - Realm
     - RealmSwift
     - SDWebImage
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
   Realm: 2b52fcc86fc0ed3d75a56ac0eb1e73c4f1a60e16
   RealmSwift: a6ea2ea561039fc3833c08dec81371a9a3bb5ca6
   SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
 
-PODFILE CHECKSUM: eaaeb5079de8f2cfd95842cdea282611234124b3
+PODFILE CHECKSUM: edcb459d100b17a0bc78bcdd707205f339c99415
 
 COCOAPODS: 1.9.3

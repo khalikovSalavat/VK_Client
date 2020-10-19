@@ -15,7 +15,7 @@ class RealmManager {
     private init?() {
         let conf = Realm.Configuration(schemaVersion: 1, deleteRealmIfMigrationNeeded: true)
         guard let realm = try? Realm(configuration: conf) else { return nil }
-        print(realm.configuration.fileURL)
+//        print(realm.configuration.fileURL)
         self.realm = realm
         
         print("Realm DataBase path is:")

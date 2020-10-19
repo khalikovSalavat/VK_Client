@@ -10,22 +10,15 @@ import UIKit
 
 class PostCell: UITableViewCell {
     
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var authorNameLabel: UILabel!
-    @IBOutlet weak var postDateLabel: UILabel!
-    @IBOutlet weak var postTextLabel: UITextView!
-    @IBOutlet weak var postImageView: UIImageView!
-    @IBOutlet weak var likeControl: LikeControl!
-    @IBOutlet weak var commentControl: CommentControl!
-    @IBOutlet weak var repostControl: RepostControl!
-    @IBOutlet weak var viewsControl: ViewsControl!
-    
-    
-//    var likeControl: LikeControl!
-//    var commentControl: CommentControl!
-//    var stackView: UIStackView!
-//    var repostControl: RepostControl!
-//    var viewsControl: ViewsControl!
+    @IBOutlet private weak var avatarImageView: UIImageView!
+    @IBOutlet private weak var authorNameLabel: UILabel!
+    @IBOutlet private weak var postDateLabel: UILabel!
+    @IBOutlet private weak var postTextLabel: UITextView!
+    @IBOutlet private weak var postImageView: UIImageView!
+    @IBOutlet private weak var likeControl: LikeControl!
+    @IBOutlet private weak var commentControl: CommentControl!
+    @IBOutlet private weak var repostControl: RepostControl!
+    @IBOutlet private weak var viewsControl: ViewsControl!
     
     override func awakeFromNib() {
         super.awakeFromNib()
